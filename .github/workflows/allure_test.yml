@@ -9,14 +9,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Run UI-tests via docker-compose
-      - uses: hoverkraft-tech/compose-action@v0.0.0
+      - name: Run docker-compose
+        uses: hoverkraft-tech/compose-action@v2.0.1
         with:
           compose-file: "./docker-compose.yml"
-            
-      - name: Generate Allure report
+
+      - name: Execute tests in the running services
         run: |
-          sudo docker-compose run test /bin/sh -c "allure generate allure-results --clean -o allure-report"
+         docker-compose run test /bin/sh -c "allure generate allure-results --clean -o allure-report"
 
       - name: Update Allure history
         run: |
