@@ -13,6 +13,12 @@ jobs:
       #clone repo
       - uses: actions/checkout@v2
 
+      - name: Checkout gh-pages to github runner
+        uses: actions/checkout@v2  
+        with:
+          ref: gh-pages
+          path: ./.github/gh-pages
+
       - name: Prepare Allure
         run: |
           mkdir -p allure-results
@@ -25,7 +31,7 @@ jobs:
       - name: Copy Allure history
         run: |
           mkdir -p allure-results/history
-          sudo cp -R ./.github/gh-pages/ allure-results/history/
+          sudo cp -R ./.github/gh-pages/last-history allure-results/history/
          
       - name: Generate Allure report
         uses: simple-elf/allure-report-action@v1.7
