@@ -19,6 +19,7 @@ jobs:
           
       - name: Run tests via docker-compose
         run: |
+          docker compose build tests
           docker compose up tests
 
       - name: Copy Allure history
