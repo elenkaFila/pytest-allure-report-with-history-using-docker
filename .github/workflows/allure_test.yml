@@ -29,16 +29,17 @@ jobs:
             cp -R ./.github/gh-pages/history/* allure-results/history/
           fi
 
-          
-      - name: Generate Allure-report
-        run: |
-          docker compose build report
-          docker compose up report
-
-      - name: Deploy to Github Pages
-        uses: JamesIves/github-pages-deploy-action@4.1.5
+      - name: Generate Allure report
+        uses: simple-elf/allure-report-action@v1.7
+        if: always()
         with:
-          token: ${{ secrets.CI_TOKEN }}
-          branch: gh-pages
-          folder: allure-report
-          clean: false
+          allure_results: allure-results
+          allure_history: allure-results
+
+      - name: Publish Allure report on GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: always()
+        with:
+          github_token: ${{ secrets.CI_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-results
