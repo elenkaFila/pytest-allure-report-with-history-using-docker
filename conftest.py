@@ -12,6 +12,7 @@ def driver(request):
         options = webdriver.ChromeOptions()
         options.page_load_strategy= 'eager'
         options.add_argument('--headless')
+        options.add_argument('--no-sandbox')
         driver = webdriver.Chrome(options=options)
         
     elif browser_param == "firefox":
