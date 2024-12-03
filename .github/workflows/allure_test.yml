@@ -1,9 +1,11 @@
 name: Run tests via Docker  
   
-on: push, 
-    workflow_dispatch,
-    schedule:
-      - cron: "00 16,18 * * *"
+on: 
+  schedule:
+    - cron: '00 18 * * *' 
+on: 
+  [push, workflow_dispatch]
+  
 
   
 jobs:  
