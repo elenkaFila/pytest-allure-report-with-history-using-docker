@@ -10,3 +10,13 @@ services:
       - ./:/usr/workspace
     command: /bin/sh -c "ls -la && pytest -sv --alluredir=allure-results"
     working_dir: /usr/workspace
+  
+  report:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/usr/workspace
+    command: >
+      /bin/sh -c "allure generate allure-results --clean -o allure-report"
+    working_dir: /usr/workspace
