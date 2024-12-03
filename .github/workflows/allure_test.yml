@@ -32,6 +32,7 @@ jobs:
           
       - name: Generate Allure-report
         run: |
+          docker compose build report
           docker compose up report
 
       - name: Deploy to Github Pages
