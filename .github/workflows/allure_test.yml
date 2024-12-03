@@ -25,7 +25,7 @@ jobs:
       - name: Copy Allure history
         run: |
           mkdir -p allure-results/history
-          sudo cp -R ./.github/gh-pages/last-history/* allure-results/history/
+          sudo cp -R ./.github/gh-pages/ allure-results/history/
          
       - name: Generate Allure report
         uses: simple-elf/allure-report-action@v1.7
