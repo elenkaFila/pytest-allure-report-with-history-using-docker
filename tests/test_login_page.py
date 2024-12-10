@@ -16,4 +16,9 @@ class TestLoginPage:
         self.login_page.enter_password(password)
         self.login_page.click_submit_button()
         time.sleep(1)
-        assert self.login_page.error_validation, "Нет ошибки валидации поля email"
+        assert self.login_page.error_validation() == True, "Нет ошибки валидации поля email"
+
+    def test_simple(self):
+        self.login_page.open()
+        self.login_page.enter_login("123")
+        assert 4 == 5

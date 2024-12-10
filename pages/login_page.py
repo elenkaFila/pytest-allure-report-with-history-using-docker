@@ -25,4 +25,4 @@ class LoginPage(BasePage):
 
     allure.step("Ошибки валидации присутствуют на странице")
     def error_validation(self):
-        self.element_is_present(self.ERROR_EMAIL_LOCATOR)
+        return self.element_is_present(self.ERROR_EMAIL_LOCATOR)

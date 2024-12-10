@@ -25,6 +25,7 @@ class BasePage:
     
     def element_is_present(self, locator):
         self.wait.until(EC.presence_of_element_located(locator))
+        return True
 
     def click_button_join(self):
         self.click_on_element(self.JOIN_BUTTON)
