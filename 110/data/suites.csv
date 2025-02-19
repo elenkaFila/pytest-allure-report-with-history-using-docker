@@ -1,0 +1,5 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Wed Feb 19 18:30:11 GMT 2025","Wed Feb 19 18:30:14 GMT 2025","2404","tests","test_login_page","TestLoginPage","","","test_login_in_account[test2-tes2t]",""
+"passed","Wed Feb 19 18:30:08 GMT 2025","Wed Feb 19 18:30:11 GMT 2025","2318","tests","test_login_page","TestLoginPage","","","test_login_in_account[test1-test1]",""
+"failed","Wed Feb 19 18:30:14 GMT 2025","Wed Feb 19 18:30:15 GMT 2025","1009","tests","test_login_page","TestLoginPage","","","test_simple",""
+"passed","Wed Feb 19 18:30:06 GMT 2025","Wed Feb 19 18:30:08 GMT 2025","2367","tests","test_login_page","TestLoginPage","","","test_login_in_account[test-test]",""
