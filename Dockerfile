@@ -1,30 +1,55 @@
-FROM python:3.12.0a4-alpine3.17
+name: Newman extra-html-report deploy to github page 
 
-# Установка зависимостей
-RUN apk update && apk add --no-cache \
-    chromium \
-    chromium-chromedriver \
-    openjdk11-jre \
-    curl \
-    tar \
-    wget \
-    bash \
-    git
+on:
+  push:
+  workflow_dispatch:
+  schedule:
+    - cron: '00 18 * * *'
 
-# Установка Allure
-RUN curl -o allure.tgz -Ls https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.8/allure-commandline-2.13.8.tgz \
-    && tar -zxvf allure.tgz -C /opt/ \
-    && ln -s /opt/allure-2.13.8/bin/allure /usr/bin/allure \
-    && rm allure.tgz
+jobs:
+  test-api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Create dir
+        run: |
+          mkdir -p testResults
 
-WORKDIR /usr/workspace
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16.x'
+      
+      - run: npm i npm@latest
+      - run: npm i
+      - name: Install newman
+        run: |
+          npm install -g newman
+          npm install -g newman-reporter-htmlextra
+      
+      - name: Run POSTMAN collection
+        run: |
+          newman run "petStore.postman_collection.json" -e "petStore.postman_environment.json" -r cli,htmlextra --reporter-htmlextra-export testResults/index.html || true
 
-# Копируем зависимости отдельно — это позволяет кэшировать pip install
-COPY requirements.txt .
+      - name: Output the results
+        uses: actions/upload-artifact@v4
+        with:
+          name: Reporter
+          path: testResults
 
-RUN pip install --no-cache-dir -r requirements.txt
+      - name: Test marketplace action
+        uses: PavanMudigonda/html-reporter-github-pages@v1.0
+        id: test-report
+        with:
+          test_results: testResults
+          gh_pages: gh-pages
+          results_history: results-history
 
-# Копируем остальной код
-COPY . .
-
-CMD ["pytest", "-sv", "--alluredir=allure-results", "--html=report.html"]
+      - name: Publish Github Pages
+        if: ${{ always() }}
+        uses: peaceiris/actions-gh-pages@v3.8.0
+        with:
+          github_token: ${{ secrets.ci_token }}
+          publish_branch: gh-pages
+          publish_dir: results-history
+          keep_files: true 
