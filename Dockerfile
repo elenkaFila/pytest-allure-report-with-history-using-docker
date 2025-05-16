@@ -1,55 +1,26 @@
-name: Newman extra-html-report deploy to github page 
+FROM python:3.12.0a4-alpine3.17
 
-on:
-  push:
-  workflow_dispatch:
-  schedule:
-    - cron: '00 18 * * *'
+# install chrome
+RUN apk update
+RUN apk add --no-cache chromium chromium-chromedriver
 
-jobs:
-  test-api:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Create dir
-        run: |
-          mkdir -p testResults
+# Get all the prereqs
+RUN wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub
+RUN wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.30-r0/glibc-2.30-r0.apk
+RUN wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.30-r0/glibc-bin-2.30-r0.apk
 
-      - name: Install Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '16.x'
-      
-      - run: npm i npm@latest
-      - run: npm i
-      - name: Install newman
-        run: |
-          npm install -g newman
-          npm install -g newman-reporter-htmlextra
-      
-      - name: Run POSTMAN collection
-        run: |
-          newman run "petStore.postman_collection.json" -e "petStore.postman_environment.json" -r cli,htmlextra --reporter-htmlextra-export testResults/index.html || true
+# install Allure
+RUN apk update && \
+    apk add openjdk11-jre curl tar && \
+    curl -o allure-2.13.8.tgz -Ls https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.8/allure-commandline-2.13.8.tgz && \
+    tar -zxvf allure-2.13.8.tgz -C /opt/ && \
+    ln -s /opt/allure-2.13.8/bin/allure /usr/bin/allure && \
+    rm allure-2.13.8.tgz
 
-      - name: Output the results
-        uses: actions/upload-artifact@v4
-        with:
-          name: Reporter
-          path: testResults
+WORKDIR /usr/workspace
 
-      - name: Test marketplace action
-        uses: PavanMudigonda/html-reporter-github-pages@v1.0
-        id: test-report
-        with:
-          test_results: testResults
-          gh_pages: gh-pages
-          results_history: results-history
+# Copy the dependencies file to the working directory
+COPY ./* /usr/workspace
 
-      - name: Publish Github Pages
-        if: ${{ always() }}
-        uses: peaceiris/actions-gh-pages@v3.8.0
-        with:
-          github_token: ${{ secrets.ci_token }}
-          publish_branch: gh-pages
-          publish_dir: results-history
-          keep_files: true 
+# Install Python dependencies
+RUN pip3 install -r requirements.txt
