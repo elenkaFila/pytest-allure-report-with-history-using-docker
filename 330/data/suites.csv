@@ -1,0 +1,5 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"failed","Sat Sep 13 18:29:28 GMT 2025","Sat Sep 13 18:29:29 GMT 2025","1230","tests","test_login_page","TestLoginPage","","","test_simple",""
+"passed","Sat Sep 13 18:29:25 GMT 2025","Sat Sep 13 18:29:27 GMT 2025","2517","tests","test_login_page","TestLoginPage","","","test_login_in_account[test2-tes2t]",""
+"passed","Sat Sep 13 18:29:19 GMT 2025","Sat Sep 13 18:29:22 GMT 2025","2570","tests","test_login_page","TestLoginPage","","","test_login_in_account[test-test]",""
+"passed","Sat Sep 13 18:29:22 GMT 2025","Sat Sep 13 18:29:24 GMT 2025","2385","tests","test_login_page","TestLoginPage","","","test_login_in_account[test1-test1]",""
